@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "mysql2/reconnect_with_readonly"
+require 'logger'
+
+Mysql2::ReconnectWithReadonly.reconnect_attempts = 5
+Mysql2::ReconnectWithReadonly.initial_retry_wait = 1
+Mysql2::ReconnectWithReadonly.max_retry_wait = 3
+Mysql2::ReconnectWithReadonly.logger = Logger.new(STDOUT)
+
+mysql2 = Mysql2::Client.new(host: 'localhost', username: 'test', password: 'test')
+mysql2.query('create database foo')
