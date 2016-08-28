@@ -70,6 +70,10 @@ module Mysql2
       @original_client = Mysql2::ReconnectWithReadonly::OriginalClient.new(@opts)
     end
 
+    # Mysql2::Client does not have a #reconnect method
+    # Mysql2::Client#close and Mysql2::Client#connect(*args) resulted in SEGV.
+    # It is required to create a new Mysql2::Client instance for reconnection.
+    # This is why we wrap orginal client with this monkey pathced client.
     def reconnect
       @original_client.close rescue nil
       @original_client = Mysql2::ReconnectWithReadonly::OriginalClient.new(@opts)
