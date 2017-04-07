@@ -65,6 +65,10 @@ module Mysql2
       end
     end
 
+    Mysql2::ReconnectWithReadonly::OriginalClient.constants.each do |const|
+      const_set(const, Mysql2::ReconnectWithReadonly::OriginalClient.const_get(const))
+    end
+
     def initialize(opts = {})
       @opts = opts
       @original_client = Mysql2::ReconnectWithReadonly::OriginalClient.new(@opts)
